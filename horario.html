@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Rodrigo Shimokawa</title>
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    </head>
+    <body>
+        <form>
+            <div class="form-group container" style="margin: 10px 0px 0px 10px; padding: 10px; position: relative; border:3px solid #cecece; width:450px">
+
+    			<h1 style="text-align: center;">Horário de Saída</h1>
+            	
+                <div class="form-group">
+                    <label for="horarioEntradaId">Horário de Entrada</label>
+                    <input type="time" name="horarioEntradaId" id="horarioEntradaId" class="form-control" placeholder="Digite o horário de  entrada" value="07:30" required>
+                    <small id="horarioEntradaId" class="form-text text-muted">
+                        Informe o horário de entrada na empresa no formato HH:MM
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="horarioSaidaAlmocoId">Horário de Saída Para o Almoço</label>
+                    <input type="time" name="horarioSaidaAlmocoId" id="horarioSaidaAlmocoId" class="form-control" placeholder="Digite o horário de saída para o almoço" value="12:00" required>
+                    <small id="horarioSaidaAlmocoId" class="form-text text-muted">
+                        Informe o horário de saída para o almoço no formato HH:MM
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="horarioRetornoAlmocoId">Horário de Retorno do Almoço</label>
+                    <input type="time" name="horarioRetornoAlmocoId" id="horarioRetornoAlmocoId" class="form-control" placeholder="Digite o horário de retorno do almoço" value="13:00" required>
+                    <small id="horarioRetornoAlmocoId" class="form-text text-muted">
+                        Informe o horário de retorno do almoço no formato HH:MM
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="almocoUmaHoraQuinze">Uma hora e quinze minutos de almoço (Compensação)</label>
+                    <input type="checkbox" name="almocoUmaHoraQuinze" id="almocoUmaHoraQuinze">
+                </div>
+                <div class="form-group">
+                    <label for="HoraExtraId">Considerar Hora Extra (2 horas)</label>
+                    <input type="checkbox" name="HoraExtraId" id="HoraExtraId">
+                </div>
+                <div>
+                    <button type="button" id="btnShowTimeId" class="btn btn-primary"> Mostrar horário de saída </button>
+                </div>
+                <br>
+                <div class="form-group alert alert-success" role="alert">
+                    <p id="horarioSaidaId"></p>
+                </div>
+            </div>
+        </form>
+
+		<script src="lib/jquery/jquery.min.js"></script>
+		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+    </body>
+
+    <script>
+	
+		let botaoShowTime = document.getElementById('btnShowTimeId');
+		let inputHorarioEntrada = document.getElementById("horarioEntradaId");
+		let inputHorarioSaidaAlmoco = document.getElementById("horarioSaidaAlmocoId");
+		let inputRetornoAlmoco = document.getElementById("horarioRetornoAlmocoId");
+		let checkAlmocoCompensacao = document.getElementById("almocoUmaHoraQuinze");
+		let checkConsideraHoraExtra = document.getElementById("HoraExtraId");
+		let labelHorarioSaida = document.getElementById("horarioSaidaId");
+		
+		botaoShowTime.addEventListener("click", MostrarHorarioSaida);
+		
+        function MostrarHorarioSaida()
+        {
+		
+			var dtHorarioEntrada = new Date();
+			console.log(dtHorarioEntrada);
+            dtHorarioEntrada.setHours(inputHorarioEntrada.value.substring(0,2), inputHorarioEntrada.value.substring(3,5),0);
+            
+			var dtSaidaAlmoco = new Date();
+			console.log(dtSaidaAlmoco);
+			dtSaidaAlmoco.setHours(inputHorarioSaidaAlmoco.value.substring(0,2), inputHorarioSaidaAlmoco.value.substring(3,5),0);
+
+			var dtRetornoAlmoco = new Date();
+			console.log(dtRetornoAlmoco);
+			dtRetornoAlmoco.setHours(inputRetornoAlmoco.value.substring(0,2), inputRetornoAlmoco.value.substring(3,5),0);
+            
+            if(checkAlmocoCompensacao.checked) {
+                var minutosAlmoco = 75; // Uma hora e quinze minutos
+            } else {
+                var minutosAlmoco = 90; // Uma hora e meia
+            }
+
+            var subtrair = (minutosAlmoco * 60000) - (dtRetornoAlmoco.getTime() - dtSaidaAlmoco.getTime());
+            dtHorarioEntrada.setTime(dtHorarioEntrada.getTime() + (480*60000) + (90*60000) - subtrair);
+            
+            if(checkConsideraHoraExtra.checked) {
+                dtHorarioEntrada.setTime(dtHorarioEntrada.getTime() + (120*60000));
+            }
+
+            labelHorarioSaida.innerText = "Horário de saída:  " + ("0" + dtHorarioEntrada.getHours()).slice(-2) + ":" + ("0" + dtHorarioEntrada.getMinutes()).slice(-2);
+
+        }
+		
+    </script>
+
+</html>
