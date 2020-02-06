@@ -56,7 +56,7 @@
             
         </footer>
 		<script src="lib/jquery/jquery.min.js"></script>
-		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 
     </body>
 
@@ -75,9 +75,9 @@
         function MostrarHorarioSaida()
         {
 		
-			var dtHorarioEntrada = new Date();
-			console.log(dtHorarioEntrada);
-            dtHorarioEntrada.setHours(inputHorarioEntrada.value.substring(0,2), inputHorarioEntrada.value.substring(3,5),0);
+			var dtEntranceHour = new Date();
+			console.log(dtEntranceHour);
+            dtEntranceHour.setHours(inputHorarioEntrada.value.substring(0,2), inputHorarioEntrada.value.substring(3,5),0);
             
 			var dtSaidaAlmoco = new Date();
 			console.log(dtSaidaAlmoco);
@@ -94,13 +94,13 @@
             }
 
             var subtrair = (minutosAlmoco * 60000) - (dtRetornoAlmoco.getTime() - dtSaidaAlmoco.getTime());
-            dtHorarioEntrada.setTime(dtHorarioEntrada.getTime() + (480*60000) + (90*60000) - subtrair);
+            dtEntranceHour.setTime(dtEntranceHour.getTime() + (480*60000) + (90*60000) - subtrair);
             
             if(checkConsideraHoraExtra.checked) {
-                dtHorarioEntrada.setTime(dtHorarioEntrada.getTime() + (120*60000));
+                dtEntranceHour.setTime(dtEntranceHour.getTime() + (120*60000));
             }
 
-            labelHorarioSaida.innerText = "Horário de saída:  " + ("0" + dtHorarioEntrada.getHours()).slice(-2) + ":" + ("0" + dtHorarioEntrada.getMinutes()).slice(-2);
+            labelHorarioSaida.innerText = "Horário de saída:  " + ("0" + dtEntranceHour.getHours()).slice(-2) + ":" + ("0" + dtEntranceHour.getMinutes()).slice(-2);
 
         }
 		
